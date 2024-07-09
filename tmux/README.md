@@ -35,7 +35,7 @@ export PATH
 <prefix> & # kill current window
 <prefix> x # kill current pane
 <prefix> % # split pane vertically
-<prefix> " # split pane vertically
+<prefix> " # split pane horizontally
 <prefix> [ # enter copy mode (for scrolling)
 ```
 

@@ -24,6 +24,21 @@ path=(
 export PATH
 ```
 
+## Useful commands to remember
+
+```
+<prefix> z # toggle the zoom state of the current pane
+<prefix> c # create new window
+<prefix> n # switch to next window
+<prefix> p # switch to previous window
+<prefix> , # rename current window
+<prefix> & # kill current window
+<prefix> x # kill current pane
+<prefix> % # split pane vertically
+<prefix> " # split pane vertically
+<prefix> [ # enter copy mode (for scrolling)
+```
+
 ## Scripts
 
 Do ensure that all scripts are executable.
@@ -36,7 +51,8 @@ chmod +x *
 
 #### 1. dev-tmux
 
-Run dev-tmux to create 3 panes, with the top pane running `nvim` like this:
+Run `dev-tmux` to create 3 panes, with the top pane running `nvim` like this:
+
 ```
 ----------------
 |     nvim     |
@@ -45,5 +61,7 @@ Run dev-tmux to create 3 panes, with the top pane running `nvim` like this:
 |       |      |
 ----------------
 ```
+
+If tmux is not started, this will start tmux. Otherwise, it'll open a new window in tmux.
 
 #### (check back for more useful scripts in the future...)

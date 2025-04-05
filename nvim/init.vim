@@ -80,7 +80,6 @@ end
 EOF
 
 " vim settings
-colorscheme cyberdream
 set signcolumn=number
 set number
 set relativenumber
@@ -114,3 +113,6 @@ nnoremap <F1> <Cmd>lua require("fzf-lua").help_tags()<CR>
 
 " remove this low usage command that conflicts with Explore
 silent! delcommand EditQuery
+
+" theme
+colorscheme cyberdream

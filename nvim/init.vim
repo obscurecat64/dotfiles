@@ -1,38 +1,86 @@
 call plug#begin()
 
-" fzf
+" fuzzy finder
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-" auto pairs
-Plug 'jiangmiao/auto-pairs'
+" autopairs
+Plug 'windwp/nvim-autopairs'
 
 " lightline
 Plug 'itchyny/lightline.vim'
 
-" coc.nvim
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 " theme
-Plug 'morhetz/gruvbox'
+Plug 'scottmckendry/cyberdream.nvim'
 
-" syntax
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
-Plug 'MaxMEllon/vim-jsx-pretty'
-Plug 'peitalin/vim-jsx-typescript'
+" syntax highlighting
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " git stuffs
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'APZelos/blamer.nvim'
 
-" coc-tsserver
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+" lsp
+Plug 'neovim/nvim-lspconfig'
+
 call plug#end()
 
+" autopairs
+lua << EOF
+require('nvim-autopairs').setup {}
+EOF
+
+" lsp
+lua << EOF
+require('lspconfig').ts_ls.setup {}
+EOF
+
+" treesitter
+lua << EOF
+require('nvim-treesitter.configs').setup {
+  ensure_installed = {
+    "javascript",
+    "typescript",
+    "tsx",
+    "html",
+    "css",
+    "json",
+  },
+  highlight = {
+    enable = true,
+  },
+  indent = {
+    enable = true,
+  },
+}
+EOF
+
+" border for floating preview
+lua << EOF
+vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white]]
+
+local border = {
+    {"╭", "FloatBorder"},
+    {"─", "FloatBorder"},
+    {"╮", "FloatBorder"},
+    {"│", "FloatBorder"},
+    {"╯", "FloatBorder"},
+    {"─", "FloatBorder"},
+    {"╰", "FloatBorder"},
+    {"│", "FloatBorder"},
+}
+
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or border
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
+EOF
+
 " vim settings
-colorscheme gruvbox
+colorscheme cyberdream
 set signcolumn=number
 set number
 set relativenumber
@@ -40,78 +88,27 @@ set tabstop=2 shiftwidth=2 expandtab
 set noswapfile
 set clipboard^=unnamed,unnamedplus
 set hidden
-" below are recommended by coc.nvim
 set nobackup
 set nowritebackup
-set cmdheight=2
-set updatetime=300
-set shortmess+=c
 
+" blamer settings
+let g:blamer_delay = 300
+let g:blamer_show_in_visual_modes = 0
+let g:blamer_show_in_insert_modes = 0
+
+" mappings
 " toggle git gutter
-nnoremap <leader>g :<C-u>GitGutterToggle<CR>
+nnoremap <leader>gg :<C-u>GitGutterToggle<CR>
+" toggle blamer
+nnoremap <leader>gb :BlamerToggle<CR>
 " enlarge window height and width
 nnoremap <silent> <Leader>f <C-w>= \| :<C-u>exe "resize" (winheight(0) * 3/2) \| exe "vert resize" (winwidth(0) * 4/3)<CR>
 " fzf.vim shortcuts
 nnoremap <C-k> :<C-u>GF <CR>
 nnoremap <C-p> :<C-u>Ag <CR>
 nnoremap <C-h> :<C-u>Hist <CR>
-
-highlight TermCursorNC ctermbg=DarkMagenta
-highlight TermCursor ctermfg=DarkMagenta
-
-" blamer settings
-let g:blamer_enabled = 1
-let g:blamer_delay = 300
-let g:blamer_show_in_visual_modes = 0
-let g:blamer_show_in_insert_modes = 0
-
-" see: https://thoughtbot.com/blog/modern-typescript-and-react-development-in-vim#highlighting-for-large-files
-autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
-autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
-
-" for coc.nvim
-" ... start
-" let g:coc_global_extensions = [ 'coc-tsserver' ]
-
-" use [g and ]g to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" code navigation
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-" highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-" run prettier
-command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
-nnoremap <leader>p :<C-u>Prettier<CR>
-
-" Add `:Format` command to format current buffer
-command! -nargs=0 Format :call CocActionAsync('format')
-" ... end
-
-" syntax settings
-let g:vim_jsx_pretty_disable_tsx = 1
-let g:typescript_indent_disable = 1
+" apply treesitter foldexpr
+nnoremap <silent> <leader>fe :setlocal foldexpr=v:lua.vim.treesitter.foldexpr()<CR> :setlocal foldlevel=2<CR> :setlocal foldmethod=expr<CR> 
 
 " remove this low usage command that conflicts with Explore
-delcommand EditQuery
+silent! delcommand EditQuery

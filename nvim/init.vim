@@ -1,8 +1,8 @@
 call plug#begin()
 
 " fuzzy finder
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+Plug 'ibhagwan/fzf-lua'
+Plug 'nvim-tree/nvim-web-devicons'
 
 " autopairs
 Plug 'windwp/nvim-autopairs'
@@ -102,13 +102,15 @@ nnoremap <leader>gg :<C-u>GitGutterToggle<CR>
 " toggle blamer
 nnoremap <leader>gb :BlamerToggle<CR>
 " enlarge window height and width
-nnoremap <silent> <Leader>f <C-w>= \| :<C-u>exe "resize" (winheight(0) * 3/2) \| exe "vert resize" (winwidth(0) * 4/3)<CR>
-" fzf.vim shortcuts
-nnoremap <C-k> :<C-u>GF <CR>
-nnoremap <C-p> :<C-u>Ag <CR>
-nnoremap <C-h> :<C-u>Hist <CR>
+nnoremap <silent> <Leader>e <C-w>= \| :<C-u>exe "resize" (winheight(0) * 3/2) \| exe "vert resize" (winwidth(0) * 4/3)<CR>
 " apply treesitter foldexpr
-nnoremap <silent> <leader>fe :setlocal foldexpr=v:lua.vim.treesitter.foldexpr()<CR> :setlocal foldlevel=2<CR> :setlocal foldmethod=expr<CR> 
+nnoremap <silent> <leader>z :setlocal foldexpr=v:lua.vim.treesitter.foldexpr()<CR> :setlocal foldlevel=2<CR> :setlocal foldmethod=expr<CR> 
+" FZF-Lua key mappings
+nnoremap <C-\> <Cmd>lua require("fzf-lua").buffers()<CR>
+nnoremap <C-k> <Cmd>lua require("fzf-lua").builtin()<CR>
+nnoremap <C-p> <Cmd>lua require("fzf-lua").files()<CR>
+nnoremap <C-l> <Cmd>lua require("fzf-lua").live_grep_glob()<CR>
+nnoremap <F1> <Cmd>lua require("fzf-lua").help_tags()<CR>
 
 " remove this low usage command that conflicts with Explore
 silent! delcommand EditQuery

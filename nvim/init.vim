@@ -28,17 +28,17 @@ call plug#end()
 
 " autopairs
 lua << EOF
-require('nvim-autopairs').setup {}
+require'nvim-autopairs'.setup {}
 EOF
 
 " lsp
 lua << EOF
-require('lspconfig').ts_ls.setup {}
+require'lspconfig'.ts_ls.setup {}
 EOF
 
 " treesitter
 lua << EOF
-require('nvim-treesitter.configs').setup {
+require'nvim-treesitter.configs'.setup {
   ensure_installed = {
     "javascript",
     "typescript",

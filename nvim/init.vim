@@ -24,7 +24,16 @@ Plug 'APZelos/blamer.nvim'
 " lsp
 Plug 'neovim/nvim-lspconfig'
 
+" prettier
+Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
 call plug#end()
+
+" fzf-lua
+lua << EOF
+require("fzf-lua").setup {
+  "hide",
+}
+EOF
 
 " autopairs
 lua << EOF
@@ -33,7 +42,7 @@ EOF
 
 " lsp
 lua << EOF
-require'lspconfig'.ts_ls.setup {}
+vim.lsp.enable('ts_ls')
 EOF
 
 " treesitter
@@ -43,6 +52,7 @@ require'nvim-treesitter.configs'.setup {
     "javascript",
     "typescript",
     "tsx",
+    "vue",
     "html",
     "css",
     "json",
@@ -89,6 +99,7 @@ set clipboard^=unnamed,unnamedplus
 set hidden
 set nobackup
 set nowritebackup
+set sessionoptions=blank,buffers,curdir,tabpages,winsize,terminal
 
 " blamer settings
 let g:blamer_delay = 300
@@ -101,15 +112,29 @@ nnoremap <leader>gg :<C-u>GitGutterToggle<CR>
 " toggle blamer
 nnoremap <leader>gb :BlamerToggle<CR>
 " enlarge window height and width
-nnoremap <silent> <Leader>e <C-w>= \| :<C-u>exe "resize" (winheight(0) * 3/2) \| exe "vert resize" (winwidth(0) * 4/3)<CR>
-" apply treesitter foldexpr
-nnoremap <silent> <leader>z :setlocal foldexpr=v:lua.vim.treesitter.foldexpr()<CR> :setlocal foldlevel=2<CR> :setlocal foldmethod=expr<CR> 
+function! ResizeCurrentWindow()
+  let current_win = winnr()
+
+  exe 'resize' (winheight(0) * 3 / 2)
+  exe 'vertical resize' (winwidth(0) * 4 / 3)
+
+  " set quickfix windows to 10 lines high
+  for w in range(1, winnr('$'))
+    let buftype = getbufvar(winbufnr(w), '&buftype')
+    if buftype ==# 'quickfix'
+      exe w . 'wincmd w'
+      resize 10
+    endif
+  endfor
+
+  exe current_win . 'wincmd w'
+endfunction
+nnoremap <silent> <Leader>e :call ResizeCurrentWindow()<CR>
 " FZF-Lua key mappings
 nnoremap <C-\> <Cmd>lua require("fzf-lua").buffers()<CR>
 nnoremap <C-k> <Cmd>lua require("fzf-lua").builtin()<CR>
 nnoremap <C-p> <Cmd>lua require("fzf-lua").files()<CR>
-nnoremap <C-l> <Cmd>lua require("fzf-lua").live_grep_glob()<CR>
-nnoremap <F1> <Cmd>lua require("fzf-lua").help_tags()<CR>
+nnoremap <C-l> <Cmd>lua require("fzf-lua").live_grep()<CR>
 
 " remove this low usage command that conflicts with Explore
 silent! delcommand EditQuery

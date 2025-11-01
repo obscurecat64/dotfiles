@@ -27,6 +27,7 @@ return {
 			html = { "prettier" },
 			json = { "prettier" },
 			lua = { "stylua" },
+			c = { "clang-format" },
 		},
 	},
 }

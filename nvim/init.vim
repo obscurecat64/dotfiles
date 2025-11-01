@@ -26,12 +26,19 @@ Plug 'neovim/nvim-lspconfig'
 
 " prettier
 Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
+
+" motion
+Plug 'ggandor/leap.nvim'
 call plug#end()
 
 " fzf-lua
 lua << EOF
 require("fzf-lua").setup {
-  "hide",
+  keymap = {
+    fzf = {
+      ["ctrl-q"] = "select-all+accept",
+    }
+  }
 }
 EOF
 
@@ -43,6 +50,11 @@ EOF
 " lsp
 lua << EOF
 vim.lsp.enable('ts_ls')
+EOF
+
+" leap
+lua << EOF
+require('leap').add_default_mappings()
 EOF
 
 " treesitter
@@ -131,10 +143,9 @@ function! ResizeCurrentWindow()
 endfunction
 nnoremap <silent> <Leader>e :call ResizeCurrentWindow()<CR>
 " FZF-Lua key mappings
-nnoremap <C-\> <Cmd>lua require("fzf-lua").buffers()<CR>
-nnoremap <C-k> <Cmd>lua require("fzf-lua").builtin()<CR>
-nnoremap <C-p> <Cmd>lua require("fzf-lua").files()<CR>
-nnoremap <C-l> <Cmd>lua require("fzf-lua").live_grep()<CR>
+nnoremap <C-p> <Cmd>lua require("fzf-lua").global()<CR>
+nnoremap <C-k> <Cmd>lua require("fzf-lua").live_grep()<CR>
+nnoremap <C-\> <Cmd>lua require("fzf-lua").builtin()<CR>
 
 " remove this low usage command that conflicts with Explore
 silent! delcommand EditQuery

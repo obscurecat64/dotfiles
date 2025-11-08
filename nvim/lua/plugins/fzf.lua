@@ -9,8 +9,9 @@ return {
 		},
 	},
 	keys = {
-		{ "<C-p>", "<Cmd>lua require('fzf-lua').global()<CR>", desc = "FZF Global" },
-		{ "<C-k>", "<Cmd>lua require('fzf-lua').live_grep()<CR>", desc = "FZF Live Grep" },
-		{ "<C-\\>", "<Cmd>lua require('fzf-lua').builtin()<CR>", desc = "FZF Builtin" },
+		{ "<C-\\>", "<Cmd>lua require('fzf-lua').buffers()<CR>", desc = "FZF Buffers" },
+		{ "<C-p>", "<Cmd>lua require('fzf-lua').files()<CR>", desc = "FZF Files" },
+		{ "<C-n>", "<Cmd>lua require('fzf-lua').live_grep()<CR>", desc = "FZF Live Grep" },
+		{ "<C-k>", "<Cmd>lua require('fzf-lua').builtin()<CR>", desc = "FZF Builtin" },
 	},
 }

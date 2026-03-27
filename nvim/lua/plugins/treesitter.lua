@@ -14,6 +14,7 @@ return {
 				"json",
 				"lua",
 				"vim",
+				"c",
 			},
 			highlight = { enable = true },
 			indent = { enable = true },

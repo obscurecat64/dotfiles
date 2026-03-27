@@ -10,7 +10,7 @@ return {
 		{
 			"<leader>f", -- <leader> + f
 			function()
-				require("conform").format({ async = true, lsp_fallback = true })
+				require("conform").format({ async = true, lsp_format = "fallback" })
 			end,
 			mode = "n", -- Normal mode
 			desc = "Format buffer",

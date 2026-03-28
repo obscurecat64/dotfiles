@@ -21,8 +21,12 @@ return {
 		config = function(_, opts)
 			require("diffview").setup(opts)
 			vim.api.nvim_create_user_command("DiffCommit", function(args)
-				local commit = args.args
-				vim.cmd("DiffviewOpen " .. commit .. "^!")
+				local rev = args.args
+				if rev:find("%.%.") then
+					vim.cmd("DiffviewOpen " .. rev)
+				else
+					vim.cmd("DiffviewOpen " .. rev .. "^!")
+				end
 			end, { nargs = 1 })
 		end,
 	},

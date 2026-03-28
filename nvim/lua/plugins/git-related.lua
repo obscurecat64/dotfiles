@@ -11,6 +11,15 @@ return {
 		},
 	},
 	{
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+		keys = {
+			{ "<leader>gd", "<cmd>DiffviewOpen<CR>", desc = "Diffview Open" },
+			{ "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", desc = "Diffview File History" },
+		},
+		opts = {},
+	},
+	{
 		"f-person/git-blame.nvim",
 		keys = {
 			{ "<leader>gb", ":<C-u>GitBlameToggle<CR>", desc = "Toggle GitBlame" },

@@ -5,6 +5,7 @@ vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.swapfile = false
+vim.opt.autoread = true
 vim.opt.clipboard = 'unnamed,unnamedplus'
 vim.opt.writebackup = false
 vim.opt.sessionoptions = 'blank,buffers,curdir,tabpages,winsize,terminal'
